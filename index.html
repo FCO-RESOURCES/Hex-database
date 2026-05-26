@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Color DB</title>
+    <style>
+        :root { --bg: #121212; --card: #1e1e1e; --text: #ffffff; --primary: #6366f1; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { width: 100%; max-width: 500px; }
+        
+        /* Login Screen */
+        #login-screen { display: flex; flex-direction: column; gap: 15px; margin-top: 50px; }
+        input[type="password"], input[type="text"] { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #333; background: #2a2a2a; color: white; box-sizing: border-box; }
+        button { padding: 12px; border: none; border-radius: 8px; background: var(--primary); color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button:hover { opacity: 0.8; }
+
+        /* App Screen */
+        #app-screen { display: none; flex-direction: column; gap: 20px; }
+        .picker-container { background: var(--card); padding: 20px; border-radius: 12px; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        input[type="color"] { width: 100%; height: 60px; border: none; border-radius: 8px; cursor: pointer; background: none; }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        input[type="color"]::-webkit-color-swatch { border: none; border-radius: 8px; }
+        
+        .color-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .color-item { background: var(--card); padding: 15px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; }
+        .color-info { display: flex; align-items: center; gap: 15px; }
+        .swatch { width: 40px; height: 40px; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.5); cursor: pointer;}
+        .details h3 { margin: 0; font-size: 16px; }
+        .details p { margin: 0; font-size: 14px; color: #aaa; cursor: pointer;}
+        .delete-btn { background: #ef4444; padding: 8px 12px; }
+        
+        /* Toast */
+        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: white; color: black; padding: 10px 20px; border-radius: 20px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center;">🎨 Color DB</h1>
+        
+        <div id="login-screen">
+            <input type="password" id="password" placeholder="Enter Password">
+            <button onclick="login()">Login</button>
+        </div>
+
+        <div id="app-screen">
+            <div class="picker-container">
+                <input type="color" id="colorPicker" value="#6366f1">
+                <input type="text" id="colorName" placeholder="Give this color a name...">
+                <button onclick="saveColor()">Save Color</button>
+            </div>
+            <button onclick="logout()" style="background:#333; margin-top:10px;">Logout</button>
+            <div class="color-list" id="colorList"></div>
+        </div>
+    </div>
+    <div id="toast">Copied!</div>
+
+    <script>
+        // ======= EDIT THIS LINE =======
+        const WORKER_URL = "https://color-api.luku-di456.workers.dev/"; // Paste your Cloudflare Worker URL here
+        // ==============================
+
+        window.onload = () => loadColors();
+
+        function getAuthHeaders() {
+            return {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('db_password')
+            };
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 2000);
+        }
+
+        async function login() {
+            const password = document.getElementById('password').value;
+            try {
+                const res = await fetch(WORKER_URL + '/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+                if (res.ok) {
+                    localStorage.setItem('db_password', password);
+                    loadColors();
+                } else {
+                    alert('Wrong password!');
+                }
+            } catch (e) {
+                alert('Error connecting to backend.');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('db_password');
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('app-screen').style.display = 'none';
+        }
+
+        async function loadColors() {
+            if (!localStorage.getItem('db_password')) return logout();
+
+            const res = await fetch(WORKER_URL + '/api/colors', { headers: getAuthHeaders() });
+            
+            if (res.status === 401) {
+                logout();
+                return;
+            }
+            
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-screen').style.display = 'flex';
+            
+            const colors = await res.json();
+            renderColors(colors);
+        }
+
+        async function saveColor() {
+            const hex = document.getElementById('colorPicker').value;
+            const name = document.getElementById('colorName').value || 'Unnamed Color';
+            
+            const res = await fetch(WORKER_URL + '/api/colors', {
+                method: 'POST',
+                headers: getAuthHeaders(),
+                body: JSON.stringify({ hex, name })
+            });
+            
+            if (res.ok) {
+                document.getElementById('colorName').value = '';
+                loadColors();
+            }
+        }
+
+        async function deleteColor(id) {
+            if(!confirm('Delete this color?')) return;
+            await fetch(WORKER_URL + '/api/colors', {
+                method: 'DELETE',
+                headers: getAuthHeaders(),
+                body: JSON.stringify({ id })
+            });
+            loadColors();
+        }
+
+        function copyHex(hex) {
+            navigator.clipboard.writeText(hex);
+            showToast(hex + ' Copied!');
+        }
+
+        function renderColors(colors) {
+            const list = document.getElementById('colorList');
+            list.innerHTML = '';
+            colors.forEach(c => {
+                list.innerHTML += `
+                    <div class="color-item">
+                        <div class="color-info">
+                            <div class="swatch" style="background-color: ${c.hex}" onclick="copyHex('${c.hex}')"></div>
+                            <div class="details">
+                                <h3>${c.name}</h3>
+                                <p onclick="copyHex('${c.hex}')">${c.hex}</p>
+                            </div>
+                        </div>
+                        <button class="delete-btn" onclick="deleteColor('${c.id}')">X</button>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
