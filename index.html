@@ -86,11 +86,9 @@
     <div id="toast">Copied!</div>
 
     <script>
-        // ======= EDIT THIS LINE =======
-        const WORKER_URL = "https://color-api.luku-di456.workers.dev"; // Paste your Worker URL here!
-        // ==============================
+        const WORKER_URL = "https://color-api.luku-di456.workers.dev"; // Your Worker URL
 
-        let colorPicker; // Will hold our pro color wheel
+        let colorPicker; 
 
         window.onload = () => {
             initColorPicker();
@@ -99,7 +97,6 @@
 
         // --- Pro Color Wheel Logic ---
         function initColorPicker() {
-            // Setup the iro.js wheel
             colorPicker = new iro.ColorPicker("#color-wheel", {
                 width: 260,
                 color: "#6366f1",
@@ -107,20 +104,18 @@
                 borderColor: "#333",
                 layout: [
                     { component: iro.ui.Wheel },
-                    { component: iro.ui.Slider, options: { sliderType: 'value' } } // Brightness slider
+                    { component: iro.ui.Slider, options: { sliderType: 'value' } }
                 ]
             });
 
             const hexInput = document.getElementById('hexInput');
             const liveSwatch = document.getElementById('live-swatch');
 
-            // When user drags the wheel, update the text box & swatch
             colorPicker.on('color:change', function(color) {
                 hexInput.value = color.hexString;
                 liveSwatch.style.backgroundColor = color.hexString;
             });
 
-            // When user types in the text box, update the wheel
             hexInput.addEventListener('input', function() {
                 let val = this.value;
                 if (!val.startsWith('#')) val = '#' + val;
@@ -128,11 +123,10 @@
                     try {
                         colorPicker.color.hexString = val;
                         liveSwatch.style.backgroundColor = val;
-                    } catch (e) { /* Ignore invalid hex typing until it's valid */ }
+                    } catch (e) { }
                 }
             });
 
-            // Set initial swatch color
             liveSwatch.style.backgroundColor = colorPicker.color.hexString;
         }
 
@@ -152,7 +146,8 @@
         }
 
         async function login() {
-            const password = document.getElementById('password').value;
+            // Automatically lowercase what the user types in the box
+            const password = document.getElementById('password').value.toLowerCase();
             try {
                 const res = await fetch(WORKER_URL + '/api/login', {
                     method: 'POST',
@@ -191,7 +186,6 @@
         }
 
         async function saveColor() {
-            // Grab color directly from our pro wheel!
             const hex = colorPicker.color.hexString; 
             const nameInput = document.getElementById('colorName');
             const name = nameInput.value || 'Unnamed Color';
@@ -203,7 +197,7 @@
             });
             
             if (res.ok) {
-                nameInput.value = ''; // Clear name input after saving
+                nameInput.value = ''; 
                 showToast("Saved!");
                 loadColors();
             }
