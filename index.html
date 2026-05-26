@@ -4,97 +4,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pro Color DB</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
     
     <style>
         * { box-sizing: border-box; }
-        :root { --bg: #0f1115; --card: #1c1f26; --text: #f8f8f2; --primary: #6366f1; --primary-hover: #4f46e5; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        :root { 
+            --bg: #0b0d10; --card: #161920; --card-hover: #1c1f28; 
+            --text: #f8f8f2; --text-muted: #8b949e; 
+            --primary: #6366f1; --primary-hover: #4f46e5; 
+            --success: #10b981; --success-hover: #059669;
+            --border: #2a2e37;
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); 
+            margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; 
+            overflow-x: hidden;
+        }
         .container { width: 100%; max-width: 480px; }
         
-        h1 { text-align: center; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 30px; }
+        h1 { text-align: center; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 30px; font-size: 28px;}
 
-        input[type="password"] { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #333; background: #15171c; color: white; font-size: 16px; font-family: 'Inter', sans-serif;}
-        button { padding: 14px; border: none; border-radius: 10px; background: var(--primary); color: white; font-weight: 600; font-size: 16px; cursor: pointer; transition: 0.2s; font-family: 'Inter', sans-serif;}
-        button:hover { background: var(--primary-hover); }
+        /* --- INPUTS & BUTTONS (Premium Feel) --- */
+        input[type="password"], input[type="text"], input[type="number"], select { 
+            width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); 
+            background: rgba(0,0,0,0.2); color: white; font-size: 15px; font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease; outline: none;
+        }
+        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15); }
 
-        #login-screen { display: flex; flex-direction: column; gap: 15px; margin-top: 50px; }
-        #app-screen { display: none; flex-direction: column; gap: 20px; }
-        .picker-card { background: var(--card); padding: 25px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; gap: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.4); border: 1px solid #2a2e37;}
+        button { 
+            padding: 14px; border: none; border-radius: 12px; background: var(--primary); 
+            color: white; font-weight: 600; font-size: 15px; cursor: pointer; 
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif;
+        }
+        button:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3); }
+        button:active { transform: scale(0.97); }
+
+        #login-screen { display: flex; flex-direction: column; gap: 15px; margin-top: 50px; animation: popIn 0.5s ease; }
+        #app-screen { display: none; flex-direction: column; gap: 24px; animation: fadeIn 0.5s ease;}
         
-        .color-tabs { display: flex; width: 100%; gap: 10px; }
-        .color-tab { flex: 1; background: #15171c; border: 2px solid #333; padding: 12px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 8px;}
-        .color-tab.active { border-color: var(--primary); background: rgba(99, 102, 241, 0.08); }
-        .tab-label { font-size: 12px; font-weight: 600; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px;}
+        /* --- MAIN CARD --- */
+        .picker-card { 
+            background: var(--card); padding: 25px; border-radius: 20px; display: flex; flex-direction: column; 
+            align-items: center; gap: 24px; box-shadow: 0 12px 32px rgba(0,0,0,0.5); border: 1px solid var(--border);
+        }
+        
+        .color-tabs { display: flex; width: 100%; gap: 12px; }
+        .color-tab { 
+            flex: 1; background: rgba(0,0,0,0.2); border: 2px solid transparent; padding: 12px; 
+            border-radius: 14px; text-align: center; cursor: pointer; transition: all 0.3s ease; 
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .color-tab.active { border-color: var(--primary); background: rgba(99, 102, 241, 0.08); transform: translateY(-2px); }
+        .tab-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
         .color-tab.active .tab-label { color: var(--primary); }
-        .tab-swatch { width: 100%; height: 30px; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1); }
-        .tab-input { width: 100%; background: transparent; border: none; color: white; font-size: 14px; font-family: monospace; outline: none; text-align: center; text-transform: uppercase; padding: 0;}
+        .tab-swatch { width: 100%; height: 32px; border-radius: 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); transition: background 0.2s ease;}
+        .tab-input { width: 100%; background: transparent; border: none; color: white; font-size: 14px; font-family: monospace; text-align: center; padding: 0;}
+        .tab-input:focus { box-shadow: none; border-color: transparent;}
 
-        /* --- NEW DIMENSIONS UI (Length & Girth) --- */
-        .slider-group { width: 100%; display: flex; flex-direction: column; gap: 10px; background: #15171c; padding: 15px; border-radius: 10px; border: 1px solid #333; }
+        /* --- DIMENSIONS UI --- */
+        .slider-group { width: 100%; display: flex; flex-direction: column; gap: 12px; background: rgba(0,0,0,0.15); padding: 18px; border-radius: 16px; border: 1px solid var(--border); }
         .slider-header { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
-        .unit-btn { background: #2a2e37; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-size: 12px; cursor: pointer;}
+        .unit-btn { background: #2a2e37; padding: 6px 12px; border-radius: 8px; font-size: 12px; box-shadow: none;}
+        .unit-btn:hover { background: #3b404d; transform: none; box-shadow: none;}
         
-        .dim-row { display: flex; gap: 10px; width: 100%; }
-        .dim-input-wrapper { flex: 1; display: flex; align-items: center; background: #0f1115; border: 1px solid #333; border-radius: 8px; overflow: hidden; padding-right: 12px;}
-        .dim-input-wrapper input { background: transparent; border: none; color: white; padding: 12px; width: 100%; font-size: 15px; outline: none; font-family: 'Inter';}
+        .dim-row { display: flex; gap: 12px; width: 100%; }
+        .dim-input-wrapper { flex: 1; display: flex; align-items: center; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; padding-right: 12px; transition: 0.3s;}
+        .dim-input-wrapper:focus-within { border-color: var(--primary); }
+        .dim-input-wrapper input { background: transparent; border: none; padding: 12px; outline: none; box-shadow: none;}
         .dim-input-wrapper span { color: #666; font-weight: bold; font-size: 12px;}
-        
-        /* Hide arrows on number inputs */
         input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
 
-        /* --- CUSTOM PROPERTIES UI --- */
-        .props-container { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+        /* --- CUSTOM PROPERTIES --- */
+        .props-container { width: 100%; display: flex; flex-direction: column; gap: 12px; }
         .active-props { display: flex; flex-direction: column; gap: 8px; }
-        .prop-row { display: flex; justify-content: space-between; align-items: center; background: #15171c; padding: 10px 15px; border-radius: 10px; border: 1px solid #333; gap: 10px;}
-        .prop-row label { font-size: 14px; color: #aaa; flex: 1; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-        .prop-input-text { flex: 1.5; background: transparent; border: none; border-bottom: 1px solid #444; color: white; font-size: 14px; outline: none; font-family: 'Inter'; padding: 4px; min-width: 0;}
-        .prop-input-check { width: 22px; height: 22px; accent-color: var(--primary); cursor: pointer; flex-shrink: 0;}
-        .prop-slider-wrapper { flex: 1.5; display: flex; align-items: center; gap: 10px; min-width: 0;}
-        .prop-slider-val { font-size: 14px; font-weight: 600; width: 20px; text-align: right; flex-shrink: 0;}
-        .prop-remove { background: transparent; color: #ef4444; border: none; font-weight: bold; cursor: pointer; padding: 4px 8px; flex-shrink: 0;}
+        .prop-row { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.15); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border); gap: 12px; animation: fadeIn 0.3s ease;}
+        .prop-row label { font-size: 14px; color: #ccc; flex: 1; font-weight: 500; }
+        .prop-input-text { flex: 1.5; background: transparent; border: none; border-bottom: 1px solid #444; border-radius: 0; padding: 4px; box-shadow: none;}
+        .prop-input-text:focus { border-bottom-color: var(--primary); box-shadow: none;}
+        .prop-input-check { width: 22px; height: 22px; accent-color: var(--primary); cursor: pointer;}
+        .prop-slider-wrapper { flex: 1.5; display: flex; align-items: center; gap: 10px;}
+        .prop-slider-val { font-size: 14px; font-weight: 600; width: 20px; text-align: right;}
+        .prop-remove { background: transparent; color: #ef4444; padding: 4px 8px; box-shadow: none;}
+        .prop-remove:hover { background: rgba(239, 68, 68, 0.1); transform: none;}
         
-        .add-prop-btn { background: #15171c; border: 1px dashed #444; color: #aaa; width: 100%; padding: 10px; border-radius: 10px; font-size: 14px; cursor: pointer; font-family: 'Inter'; transition: 0.2s;}
-        .add-prop-btn:hover { border-color: var(--primary); color: white; }
+        .add-prop-btn { background: rgba(0,0,0,0.15); border: 1px dashed #444; color: #aaa; box-shadow: none;}
+        .add-prop-btn:hover { border-color: var(--primary); color: white; transform: none; box-shadow: none;}
         
-        .prop-menu { display: none; flex-direction: column; gap: 12px; background: #2a2e37; padding: 15px; border-radius: 10px; margin-top: 5px; width: 100%;}
-        
+        .prop-menu { display: none; flex-direction: column; gap: 12px; background: var(--card-hover); padding: 18px; border-radius: 14px; border: 1px solid var(--border); animation: slideDown 0.3s ease;}
         .freq-list { display: flex; flex-wrap: wrap; gap: 8px; }
-        .freq-chip { display: inline-flex; align-items: center; background: #15171c; border: 1px solid #444; border-radius: 20px; font-size: 12px; color: #ddd; overflow: hidden;}
+        .freq-chip { display: inline-flex; align-items: center; background: var(--bg); border: 1px solid var(--border); border-radius: 20px; font-size: 12px; color: #ddd; transition: 0.2s;}
+        .freq-chip:hover { border-color: #555; }
         .freq-chip-add { padding: 6px 10px; cursor: pointer; }
-        .freq-chip-add:hover { background: rgba(99, 102, 241, 0.1); color: white; }
-        .freq-chip-del { padding: 6px 8px; border-left: 1px solid #444; cursor: pointer; color: #ef4444; font-weight: bold; }
+        .freq-chip-add:hover { color: var(--primary); }
+        .freq-chip-del { padding: 6px 10px; border-left: 1px solid var(--border); cursor: pointer; color: #ef4444; }
         .freq-chip-del:hover { background: rgba(239, 68, 68, 0.1); }
+        .new-prop-row { display: flex; gap: 8px; width: 100%; }
         
-        .new-prop-row { display: flex; gap: 8px; width: 100%; align-items: center;}
-        .new-prop-row input, .new-prop-row select { background: #15171c; border: 1px solid #444; color: white; padding: 8px; border-radius: 6px; font-size: 13px; outline: none; }
-        .new-prop-row input { flex: 1; min-width: 0; }
-        .new-prop-row select { flex-shrink: 1; min-width: 0; } 
-        .new-prop-row button { padding: 8px 12px; font-size: 13px; flex-shrink: 0; }
-
-        .name-group { width: 100%; display: flex; flex-direction: column; gap: 12px; }
-        .name-input { background: #15171c; padding: 14px; border-radius: 10px; border: 1px solid #333; color: white; font-size: 16px; width: 100%;}
-        .save-btn { width: 100%; }
+        /* --- ACTION BUTTONS (Save & Cancel) --- */
+        .action-buttons { width: 100%; display: flex; gap: 10px; }
+        .save-btn { flex: 1; }
+        .update-mode { background: var(--success); box-shadow: 0 0 15px rgba(16,185,129,0.3); animation: pulseGreen 2s infinite;}
+        .update-mode:hover { background: var(--success-hover); }
+        .cancel-btn { background: #3b404d; display: none; flex: 0.4;}
+        .cancel-btn:hover { background: #4b5162; }
 
         /* --- SAVED CARDS --- */
-        .color-list { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; }
-        .color-item { background: var(--card); border-radius: 12px; border: 1px solid #2a2e37; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0,0,0,0.2);}
-        .full-bar { width: 100%; height: 60px; cursor: pointer; border-bottom: 1px solid #2a2e37;}
-        .item-footer { padding: 16px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-        .details { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0;}
-        .details h3 { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.2; word-wrap: break-word;}
-        .details p { margin: 0; font-size: 12px; color: #8b949e; font-family: monospace; }
+        .color-list { display: flex; flex-direction: column; gap: 16px; margin-top: 10px; }
+        .color-item { 
+            background: var(--card); border-radius: 16px; border: 1px solid var(--border); overflow: hidden; 
+            display: flex; flex-direction: column; box-shadow: 0 6px 12px rgba(0,0,0,0.3); 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; 
+            animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .color-item:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.5); border-color: #3b404d;}
+        
+        .full-bar { width: 100%; height: 60px; cursor: pointer; border-bottom: 1px solid var(--border); transition: height 0.3s ease;}
+        .full-bar:hover { height: 70px; }
+        
+        .item-footer { padding: 18px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+        .details { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0;}
+        .details h3 { margin: 0; font-size: 17px; font-weight: 600; line-height: 1.2;}
+        .details p { margin: 0; font-size: 13px; color: var(--text-muted); font-family: monospace; }
         
         .tags-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-        .tag { background: #15171c; border: 1px solid #333; padding: 4px 8px; border-radius: 6px; font-size: 11px; color: #ccc; font-weight: 600; letter-spacing: 0.5px; }
-        .tag.check-true { color: #10b981; border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.05); }
+        .tag { background: rgba(0,0,0,0.2); border: 1px solid var(--border); padding: 5px 10px; border-radius: 8px; font-size: 11px; color: #ccc; font-weight: 600; }
+        .tag.check-true { color: var(--success); border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.05); }
         .tag.check-false { color: #ef4444; border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.05); text-decoration: line-through;}
 
-        .delete-btn { background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 8px 12px; border-radius: 8px; font-weight: bold; flex-shrink: 0;}
-        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 12px 24px; border-radius: 30px; font-weight: 600; font-size: 14px; opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 100;}
-        .show-toast { opacity: 1 !important; }
+        .card-actions { display: flex; flex-direction: column; gap: 8px; }
+        .edit-btn { background: rgba(99, 102, 241, 0.1); color: var(--primary); padding: 8px 12px; border-radius: 10px; font-size: 13px; box-shadow: none;}
+        .edit-btn:hover { background: rgba(99, 102, 241, 0.2); transform: translateY(-1px);}
+        .delete-btn { background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 8px 12px; border-radius: 10px; font-size: 13px; box-shadow: none;}
+        .delete-btn:hover { background: rgba(239, 68, 68, 0.2); transform: translateY(-1px);}
+        
+        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px); background: rgba(255,255,255,0.9); backdrop-filter: blur(5px); color: #000; padding: 12px 24px; border-radius: 30px; font-weight: 600; font-size: 14px; opacity: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 100;}
+        .show-toast { opacity: 1 !important; transform: translateX(-50%) translateY(0) !important; }
+
+        /* --- ANIMATIONS --- */
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulseGreen { 0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); } 70% { box-shadow: 0 0 0 10px rgba(16,185,129,0); } 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); } }
     </style>
 </head>
 <body>
@@ -103,7 +158,7 @@
         
         <div id="login-screen">
             <input type="password" id="password" placeholder="Enter Password">
-            <button onclick="login()">Login</button>
+            <button onclick="login()">Login to Database</button>
         </div>
 
         <div id="app-screen">
@@ -124,34 +179,32 @@
 
                 <div id="color-wheel"></div>
 
-                <!-- NEW: Empty Number Inputs for Length & Girth -->
                 <div class="slider-group">
                     <div class="slider-header">
-                        <span style="color:#aaa;">Dimensions (<span id="unitDisplay">cm</span>)</span>
+                        <span style="color:#aaa; font-weight: 500;">Dimensions (<span id="unitDisplay">cm</span>)</span>
                         <button class="unit-btn" id="unitToggle" onclick="toggleUnit()">Swap to Inches</button>
                     </div>
                     <div class="dim-row">
                         <div class="dim-input-wrapper">
-                            <input type="number" id="lengthInput" placeholder="Length (Ø)" step="0.1">
+                            <input type="number" id="lengthInput" placeholder="Length" step="0.1">
                             <span class="unit-label">cm</span>
                         </div>
                         <div class="dim-input-wrapper">
-                            <input type="number" id="girthInput" placeholder="Girth (Ø)" step="0.1">
+                            <input type="number" id="girthInput" placeholder="Girth" step="0.1">
                             <span class="unit-label">cm</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- CUSTOM PROPERTIES -->
                 <div class="props-container">
                     <div class="active-props" id="active-props-list"></div>
                     <button class="add-prop-btn" onclick="togglePropMenu()">+ Add Custom Property</button>
                     
                     <div class="prop-menu" id="prop-menu">
-                        <span style="font-size: 12px; color: #888; font-weight: bold; text-transform: uppercase;">Often Used (Cloud Synced)</span>
+                        <span style="font-size: 11px; color: #888; font-weight: bold; text-transform: uppercase;">Often Used (Cloud Synced)</span>
                         <div class="freq-list" id="freq-list"><span style="font-size:12px; color:#666;">Loading...</span></div>
                         
-                        <span style="font-size: 12px; color: #888; font-weight: bold; text-transform: uppercase; margin-top: 10px;">Create New</span>
+                        <span style="font-size: 11px; color: #888; font-weight: bold; text-transform: uppercase; margin-top: 10px;">Create New Variable</span>
                         <div class="new-prop-row">
                             <input type="text" id="newPropName" placeholder="E.g. Firmness">
                             <select id="newPropType">
@@ -159,18 +212,21 @@
                                 <option value="slider">Slider (1-10)</option>
                                 <option value="check">Checkmark</option>
                             </select>
-                            <button onclick="createNewProp()">Add</button>
+                            <button onclick="createNewProp()" style="padding: 0 16px;">Add</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="name-group">
-                    <input type="text" id="colorName" class="name-input" placeholder="Give this entry a name...">
-                    <button class="save-btn" onclick="saveColor()">Save Entry</button>
+                <div style="width: 100%; display: flex; flex-direction: column; gap: 12px;">
+                    <input type="text" id="colorName" placeholder="Give this entry a name...">
+                    <div class="action-buttons">
+                        <button id="saveBtn" class="save-btn" onclick="saveColor()">Save Entry</button>
+                        <button id="cancelBtn" class="cancel-btn" onclick="cancelEdit()">Cancel</button>
+                    </div>
                 </div>
             </div>
             
-            <button onclick="logout()" style="background:transparent; border: 1px solid #333; color: #888; padding: 12px; width: 100%; border-radius: 10px;">Logout</button>
+            <button onclick="logout()" style="background:transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 12px; box-shadow: none;">Logout safely</button>
             <div class="color-list" id="colorList"></div>
         </div>
     </div>
@@ -179,7 +235,7 @@
 
     <script>
         // ======= EDIT THIS LINE =======
-        const WORKER_URL = "https://color-api2.luku-di456.workers.dev"; // Paste your Worker URL here!
+        const WORKER_URL = "https://color-api2.luku-di456.workers.dev"; // Your Worker URL
         // ==============================
 
         let colorPicker; 
@@ -188,47 +244,33 @@
         let activeTab = 0;
 
         let currentProps = []; 
-        let freqProps = []; // Now pulled strictly from Cloudflare!
+        let freqProps = []; 
+        
+        let loadedColors = []; // Store fetched DB entries
+        let editingId = null;  // Track if we are editing an entry
 
         window.onload = () => {
             initColorPicker();
-            // Automatically log in if cookie exists
-            if(localStorage.getItem('db_password')) {
-                loadCloudData();
-            }
+            if(localStorage.getItem('db_password')) loadCloudData();
         };
 
-        // --- NEW: CLOUD DATA SYNC ---
         async function loadCloudData() {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'flex';
-            
-            // Load both properties and colors from cloud simultaneously 
             loadFreqProps();
             loadColors();
         }
 
         async function loadFreqProps() {
             const res = await fetch(WORKER_URL + '/api/props', { headers: getAuthHeaders() });
-            if (res.ok) {
-                freqProps = await res.json();
-                renderFreqProps();
-            }
+            if (res.ok) { freqProps = await res.json(); renderFreqProps(); }
         }
 
         async function deleteFreqProp(name) {
             if(!confirm(`Delete '${name}' from Often Used?`)) return;
-            
-            // Delete from UI instantly
             freqProps = freqProps.filter(p => p.name !== name);
             renderFreqProps();
-
-            // Delete from Cloudflare Backend
-            await fetch(WORKER_URL + '/api/props', {
-                method: 'DELETE',
-                headers: getAuthHeaders(),
-                body: JSON.stringify({ name })
-            });
+            await fetch(WORKER_URL + '/api/props', { method: 'DELETE', headers: getAuthHeaders(), body: JSON.stringify({ name }) });
         }
 
         async function createNewProp() {
@@ -239,21 +281,13 @@
             addPropToForm(name, type);
             document.getElementById('newPropName').value = '';
 
-            // Post to Cloudflare Backend
             if (!freqProps.find(p => p.name.toLowerCase() === name.toLowerCase())) {
                 freqProps.push({ name, type });
                 renderFreqProps();
-                
-                await fetch(WORKER_URL + '/api/props', {
-                    method: 'POST',
-                    headers: getAuthHeaders(),
-                    body: JSON.stringify({ name, type })
-                });
+                await fetch(WORKER_URL + '/api/props', { method: 'POST', headers: getAuthHeaders(), body: JSON.stringify({ name, type }) });
             }
         }
 
-
-        // --- Custom Properties UI Logic ---
         function togglePropMenu() {
             const menu = document.getElementById('prop-menu');
             menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
@@ -261,13 +295,7 @@
 
         function renderFreqProps() {
             const list = document.getElementById('freq-list');
-            list.innerHTML = '';
-            
-            if(freqProps.length === 0) {
-                list.innerHTML = '<span style="font-size:12px; color:#666; font-style:italic;">No saved variables yet.</span>';
-                return;
-            }
-
+            list.innerHTML = freqProps.length ? '' : '<span style="font-size:12px; color:#666; font-style:italic;">No saved variables yet.</span>';
             freqProps.forEach((p) => {
                 list.innerHTML += `
                     <div class="freq-chip">
@@ -280,59 +308,31 @@
 
         function addPropToForm(name, type) {
             if (currentProps.find(p => p.name === name)) return; 
-            
-            let defaultVal = type === 'text' ? '' : (type === 'slider' ? 5 : false);
-            currentProps.push({ name, type, value: defaultVal });
-            
+            currentProps.push({ name, type, value: type === 'text' ? '' : (type === 'slider' ? 5 : false) });
             document.getElementById('prop-menu').style.display = 'none';
             renderActiveProps();
         }
 
-        function removeProp(index) {
-            currentProps.splice(index, 1);
-            renderActiveProps();
-        }
-
+        function removeProp(index) { currentProps.splice(index, 1); renderActiveProps(); }
         function updatePropVal(index, val) {
             currentProps[index].value = val;
-            if (currentProps[index].type === 'slider') {
-                document.getElementById(`prop-val-${index}`).innerText = val;
-            }
+            if (currentProps[index].type === 'slider') document.getElementById(`prop-val-${index}`).innerText = val;
         }
 
         function renderActiveProps() {
             const container = document.getElementById('active-props-list');
             container.innerHTML = '';
             currentProps.forEach((p, i) => {
-                let inputHtml = '';
-                if (p.type === 'text') {
-                    inputHtml = `<input type="text" class="prop-input-text" placeholder="..." value="${p.value}" oninput="updatePropVal(${i}, this.value)">`;
-                } else if (p.type === 'slider') {
-                    inputHtml = `
-                        <div class="prop-slider-wrapper">
-                            <input type="range" min="1" max="10" value="${p.value}" oninput="updatePropVal(${i}, this.value)">
-                            <span class="prop-slider-val" id="prop-val-${i}">${p.value}</span>
-                        </div>
-                    `;
-                } else if (p.type === 'check') {
-                    inputHtml = `<input type="checkbox" class="prop-input-check" ${p.value ? 'checked' : ''} onchange="updatePropVal(${i}, this.checked)">`;
-                }
-
-                container.innerHTML += `
-                    <div class="prop-row">
-                        <label title="${p.name}">${p.name}</label>
-                        ${inputHtml}
-                        <button class="prop-remove" onclick="removeProp(${i})">✕</button>
-                    </div>
-                `;
+                let inputHtml = p.type === 'text' ? `<input type="text" class="prop-input-text" placeholder="..." value="${p.value}" oninput="updatePropVal(${i}, this.value)">` :
+                                p.type === 'slider' ? `<div class="prop-slider-wrapper"><input type="range" min="1" max="10" value="${p.value}" oninput="updatePropVal(${i}, this.value)"><span class="prop-slider-val" id="prop-val-${i}">${p.value}</span></div>` :
+                                `<input type="checkbox" class="prop-input-check" ${p.value ? 'checked' : ''} onchange="updatePropVal(${i}, this.checked)">`;
+                container.innerHTML += `<div class="prop-row"><label>${p.name}</label>${inputHtml}<button class="prop-remove" onclick="removeProp(${i})">✕</button></div>`;
             });
         }
 
-
-        // --- Wheel & Unit Logic ---
         function initColorPicker() {
             colorPicker = new iro.ColorPicker("#color-wheel", {
-                width: 250, color: activeColors[0], borderWidth: 2, borderColor: "#333",
+                width: 260, color: activeColors[0], borderWidth: 2, borderColor: "#2a2e37",
                 layout: [{ component: iro.ui.Wheel }, { component: iro.ui.Slider, options: { sliderType: 'value' } }]
             });
 
@@ -345,8 +345,7 @@
             [0, 1].forEach(i => {
                 const input = document.getElementById('input-' + i);
                 input.addEventListener('input', function() {
-                    let val = this.value;
-                    if (!val.startsWith('#')) val = '#' + val;
+                    let val = this.value; if (!val.startsWith('#')) val = '#' + val;
                     if (val.length === 4 || val.length === 7) {
                         try { 
                             activeColors[i] = val;
@@ -367,32 +366,29 @@
             try { colorPicker.color.hexString = activeColors[index]; } catch (e) {}
         }
 
+        function syncUnitUI() {
+            document.getElementById('unitToggle').innerText = useInches ? "Swap to cm" : "Swap to Inches";
+            document.querySelectorAll('.unit-label').forEach(l => l.innerText = useInches ? 'in' : 'cm');
+            document.getElementById('unitDisplay').innerText = useInches ? 'in' : 'cm';
+        }
+
         function toggleUnit() {
             useInches = !useInches;
-            document.getElementById('unitToggle').innerText = useInches ? "Swap to cm" : "Swap to Inches";
-            
-            const labels = document.querySelectorAll('.unit-label');
-            labels.forEach(l => l.innerText = useInches ? 'in' : 'cm');
-            document.getElementById('unitDisplay').innerText = useInches ? 'in' : 'cm';
-            
-            // Convert inputs automatically if they have numbers in them
+            syncUnitUI();
             const lenInput = document.getElementById('lengthInput');
             const grtInput = document.getElementById('girthInput');
-            
             if(lenInput.value) lenInput.value = useInches ? (lenInput.value / 2.54).toFixed(2) : (lenInput.value * 2.54).toFixed(2);
             if(grtInput.value) grtInput.value = useInches ? (grtInput.value / 2.54).toFixed(2) : (grtInput.value * 2.54).toFixed(2);
         }
 
-        // --- Auth & Saving ---
         function getAuthHeaders() { return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('db_password') }; }
         function showToast(msg) { const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show-toast'); setTimeout(() => t.classList.remove('show-toast'), 2000); }
 
         async function login() {
-            const password = document.getElementById('password').value.toLowerCase();
+            const password = document.getElementById('password').value;
             try {
                 const res = await fetch(WORKER_URL + '/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) });
-                if (res.ok) { localStorage.setItem('db_password', password); loadCloudData(); } 
-                else { alert('Wrong password!'); }
+                if (res.ok) { localStorage.setItem('db_password', password); loadCloudData(); } else alert('Wrong password!');
             } catch (e) { alert('Error connecting.'); }
         }
 
@@ -405,37 +401,87 @@
         async function loadColors() {
             const res = await fetch(WORKER_URL + '/api/colors', { headers: getAuthHeaders() });
             if (res.status === 401) return logout();
-            
-            const colors = await res.json();
-            renderColors(colors);
+            loadedColors = await res.json();
+            renderColors(loadedColors);
+        }
+
+        /* --- NEW EDIT FUNCTIONALITY --- */
+        function editColor(id) {
+            const color = loadedColors.find(c => c.id === id);
+            if (!color) return;
+
+            editingId = id; // Set edit state
+
+            // Populate Colors
+            activeColors[0] = color.hex1 || '#6366f1';
+            activeColors[1] = color.hex2 || '#ec4899';
+            document.getElementById('input-0').value = activeColors[0].toUpperCase();
+            document.getElementById('input-1').value = activeColors[1].toUpperCase();
+            document.getElementById('swatch-0').style.background = activeColors[0];
+            document.getElementById('swatch-1').style.background = activeColors[1];
+            switchTab(0);
+
+            // Populate Dimensions (Avoiding double conversion)
+            useInches = (color.unit === 'in');
+            syncUnitUI();
+            document.getElementById('lengthInput').value = color.length || color.lengthCm || '';
+            document.getElementById('girthInput').value = color.girth || '';
+
+            // Populate Props & Name
+            currentProps = JSON.parse(JSON.stringify(color.customFields || []));
+            renderActiveProps();
+            document.getElementById('colorName').value = color.name || '';
+
+            // Update UI buttons
+            const btn = document.getElementById('saveBtn');
+            btn.innerText = "Update Entry";
+            btn.classList.add('update-mode');
+            document.getElementById('cancelBtn').style.display = "block";
+
+            // Scroll up smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function cancelEdit() {
+            editingId = null;
+            document.getElementById('colorName').value = '';
+            document.getElementById('lengthInput').value = '';
+            document.getElementById('girthInput').value = '';
+            currentProps = [];
+            renderActiveProps();
+
+            const btn = document.getElementById('saveBtn');
+            btn.innerText = "Save Entry";
+            btn.classList.remove('update-mode');
+            document.getElementById('cancelBtn').style.display = "none";
         }
 
         async function saveColor() {
-            const hex1 = activeColors[0]; 
-            const hex2 = activeColors[1]; 
+            const payload = {
+                id: editingId, // Will be null if it's a new entry
+                name: document.getElementById('colorName').value || 'Unnamed Entry',
+                hex1: activeColors[0], 
+                hex2: activeColors[1], 
+                length: document.getElementById('lengthInput').value,
+                girth: document.getElementById('girthInput').value,
+                unit: useInches ? 'in' : 'cm',
+                customFields: currentProps
+            };
             
-            const length = document.getElementById('lengthInput').value;
-            const girth = document.getElementById('girthInput').value;
-            const unit = useInches ? 'in' : 'cm';
+            const btn = document.getElementById('saveBtn');
+            const originalText = btn.innerText;
+            btn.innerText = "Saving...";
 
-            const nameInput = document.getElementById('colorName');
-            const name = nameInput.value || 'Unnamed Entry';
-            
             const res = await fetch(WORKER_URL + '/api/colors', {
-                method: 'POST',
-                headers: getAuthHeaders(),
-                body: JSON.stringify({ name, hex1, hex2, length, girth, unit, customFields: currentProps })
+                method: 'POST', headers: getAuthHeaders(), body: JSON.stringify(payload)
             });
             
             if (res.ok) {
-                nameInput.value = ''; 
-                document.getElementById('lengthInput').value = '';
-                document.getElementById('girthInput').value = '';
-                currentProps = []; 
-                renderActiveProps();
-                showToast("Saved!");
+                cancelEdit(); // Reset form
+                showToast(editingId ? "Entry Updated!" : "Entry Saved!");
                 loadColors();
             }
+            btn.innerText = originalText;
         }
 
         async function deleteColor(id) {
@@ -452,44 +498,31 @@
         function renderColors(colors) {
             const list = document.getElementById('colorList');
             list.innerHTML = '';
-            colors.forEach(c => {
-                const h1 = c.hex1 || c.hex || '#000000';
-                const h2 = c.hex2 || c.hex || '#ffffff';
-                
-                // Read from cloud: If it's missing or blank, show Ø
+            colors.forEach((c, index) => {
+                const h1 = c.hex1 || '#000000'; const h2 = c.hex2 || '#ffffff';
                 const u = c.unit || 'cm';
-                const len = c.length || c.lengthCm; // lengthCm handles backward compatibility with old saves
-                const grt = c.girth;
+                const lStr = (c.length || c.lengthCm) ? `${c.length || c.lengthCm} ${u}` : 'Ø';
+                const gStr = c.girth ? `${c.girth} ${u}` : 'Ø';
 
-                const lStr = len ? `${len} ${u}` : 'Ø';
-                const gStr = grt ? `${grt} ${u}` : 'Ø';
-
-                const gradient = `linear-gradient(to right, ${h1} 50%, ${h2} 50%)`;
-
-                let tagsHtml = '';
-                if (c.customFields && c.customFields.length > 0) {
-                    tagsHtml = '<div class="tags-container">';
-                    c.customFields.forEach(f => {
-                        if (f.type === 'check') {
-                            tagsHtml += `<span class="tag ${f.value ? 'check-true' : 'check-false'}">${f.name}</span>`;
-                        } else {
-                            tagsHtml += `<span class="tag">${f.name}: <span style="color:#fff">${f.value}</span></span>`;
-                        }
-                    });
-                    tagsHtml += '</div>';
-                }
+                let tagsHtml = c.customFields?.length ? '<div class="tags-container">' + c.customFields.map(f => 
+                    f.type === 'check' ? `<span class="tag ${f.value ? 'check-true' : 'check-false'}">${f.name}</span>` 
+                    : `<span class="tag">${f.name}: <span style="color:#fff">${f.value}</span></span>`
+                ).join('') + '</div>' : '';
 
                 list.innerHTML += `
-                    <div class="color-item">
-                        <div class="full-bar" style="background: ${gradient};" onclick="copyData('${h1}', '${h2}')"></div>
+                    <div class="color-item" style="animation-delay: ${index * 0.08}s">
+                        <div class="full-bar" style="background: linear-gradient(to right, ${h1} 50%, ${h2} 50%);" onclick="copyData('${h1}', '${h2}')"></div>
                         <div class="item-footer">
                             <div class="details">
                                 <h3>${c.name}</h3>
-                                <p style="font-family: 'Inter'; color: #aaa;">Base: <span style="color:${h1}; font-family: monospace;">${h1}</span> &nbsp;&bull;&nbsp; Tip: <span style="color:${h2}; font-family: monospace;">${h2}</span></p>
-                                <p style="font-family: 'Inter'; color: #aaa;">Len: <span style="color:#fff;">${lStr}</span> &nbsp;&bull;&nbsp; Girth: <span style="color:#fff;">${gStr}</span></p>
+                                <p>Base: <span style="color:${h1};">${h1}</span> &nbsp;&bull;&nbsp; Tip: <span style="color:${h2};">${h2}</span></p>
+                                <p>Len: <span style="color:#fff;">${lStr}</span> &nbsp;&bull;&nbsp; Girth: <span style="color:#fff;">${gStr}</span></p>
                                 ${tagsHtml}
                             </div>
-                            <button class="delete-btn" onclick="deleteColor('${c.id}')">✕</button>
+                            <div class="card-actions">
+                                <button class="edit-btn" onclick="editColor('${c.id}')">Edit</button>
+                                <button class="delete-btn" onclick="deleteColor('${c.id}')">✕</button>
+                            </div>
                         </div>
                     </div>
                 `;
