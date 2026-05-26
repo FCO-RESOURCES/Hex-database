@@ -10,7 +10,7 @@
     <style>
         :root { --bg: #0f1115; --card: #1c1f26; --text: #f8f8f2; --primary: #6366f1; --primary-hover: #4f46e5; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .container { width: 100%; max-width: 450px; }
+        .container { width: 100%; max-width: 480px; }
         
         h1 { text-align: center; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 30px; }
 
@@ -24,18 +24,19 @@
         #app-screen { display: none; flex-direction: column; gap: 20px; }
         .picker-card { background: var(--card); padding: 25px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; gap: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.4); border: 1px solid #2a2e37;}
         
-        /* Dual Hex Input Area */
-        .hex-container { width: 100%; display: flex; gap: 10px; }
-        .hex-col { display: flex; flex-direction: column; flex: 1; gap: 6px; }
-        .hex-label { font-size: 12px; color: #8b949e; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-left: 2px;}
-        .hex-group { display: flex; align-items: center; gap: 8px; background: #15171c; padding: 10px; border-radius: 10px; border: 1px solid #333; box-sizing: border-box;}
-        .hex-swatch { width: 24px; height: 24px; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1); transition: background 0.1s; flex-shrink: 0;}
-        input[type="text"] { width: 100%; background: transparent; border: none; color: white; font-size: 14px; font-family: monospace; outline: none; text-transform: uppercase; padding: 0;}
-        
+        /* BIG TAB SELECTION (Fixes tiny dots!) */
+        .color-tabs { display: flex; width: 100%; gap: 10px; }
+        .color-tab { flex: 1; background: #15171c; border: 2px solid #333; padding: 12px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 8px;}
+        .color-tab.active { border-color: var(--primary); background: rgba(99, 102, 241, 0.08); }
+        .tab-label { font-size: 12px; font-weight: 600; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px;}
+        .color-tab.active .tab-label { color: var(--primary); }
+        .tab-swatch { width: 100%; height: 30px; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1); }
+        .tab-input { width: 100%; background: transparent; border: none; color: white; font-size: 14px; font-family: monospace; outline: none; text-align: center; text-transform: uppercase; padding: 0;}
+
         /* Slider Area */
         .slider-group { width: 100%; display: flex; flex-direction: column; gap: 10px; background: #15171c; padding: 15px; border-radius: 10px; border: 1px solid #333; box-sizing: border-box;}
         .slider-header { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
-        .unit-btn { background: #2a2e37; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 12px; cursor: pointer;}
+        .unit-btn { background: #2a2e37; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-size: 12px; cursor: pointer;}
         input[type="range"] { width: 100%; accent-color: var(--primary); cursor: pointer; }
 
         /* Name & Save */
@@ -43,24 +44,16 @@
         .name-input { background: #15171c; padding: 14px; border-radius: 10px; border: 1px solid #333; color: white; font-size: 16px; box-sizing: border-box; width: 100%;}
         .save-btn { width: 100%; }
 
-        /* Color List - Sliced Bat Shape */
-        .color-list { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
-        .color-item { background: var(--card); padding: 14px 16px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #2a2e37; transition: transform 0.1s;}
+        /* FULL BAR REDESIGN */
+        .color-list { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; }
+        .color-item { background: var(--card); border-radius: 12px; border: 1px solid #2a2e37; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0,0,0,0.2);}
         
-        .color-info { display: flex; align-items: center; gap: 15px; flex-grow: 1; cursor: pointer; min-width: 0; }
+        /* The literal "Whole Bar" */
+        .full-bar { width: 100%; height: 60px; cursor: pointer; border-bottom: 1px solid #2a2e37;}
         
-        /* The Sliced Bat Shape */
-        .bat-swatch { 
-            width: 34px; 
-            height: 60px; /* Tall oval shape */
-            border-radius: 40px; /* Fully rounded ends */
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1), 0 4px 6px rgba(0,0,0,0.3); 
-            flex-shrink: 0; 
-            border: 2px solid #111;
-        }
-
-        .details { flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px;}
-        .details h3 { margin: 0; font-size: 16px; font-weight: 600; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; line-height: 1.2;}
+        .item-footer { padding: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .details { display: flex; flex-direction: column; gap: 4px;}
+        .details h3 { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.2;}
         .details p { margin: 0; font-size: 12px; color: #8b949e; font-family: monospace; }
         .details .labels { font-family: 'Inter', sans-serif; color: #aaa; }
         
@@ -82,26 +75,23 @@
 
         <div id="app-screen">
             <div class="picker-card">
-                <!-- Color Wheel -->
-                <div id="color-wheel"></div>
                 
-                <!-- Labeled Hex Inputs -->
-                <div class="hex-container">
-                    <div class="hex-col">
-                        <span class="hex-label">Base Color</span>
-                        <div class="hex-group">
-                            <div class="hex-swatch" id="live-swatch-1"></div>
-                            <input type="text" id="hexInput1" maxlength="7" value="#6366f1">
-                        </div>
+                <!-- NEW EASY-SELECT TABS -->
+                <div class="color-tabs">
+                    <div class="color-tab active" id="tab-0" onclick="switchTab(0)">
+                        <span class="tab-label">Base Color</span>
+                        <div class="tab-swatch" id="swatch-0" style="background: #6366f1;"></div>
+                        <input type="text" class="tab-input" id="input-0" value="#6366F1" maxlength="7" onclick="event.stopPropagation()">
                     </div>
-                    <div class="hex-col">
-                        <span class="hex-label">Tip Color</span>
-                        <div class="hex-group">
-                            <div class="hex-swatch" id="live-swatch-2"></div>
-                            <input type="text" id="hexInput2" maxlength="7" value="#ec4899">
-                        </div>
+                    <div class="color-tab" id="tab-1" onclick="switchTab(1)">
+                        <span class="tab-label">Tip Color</span>
+                        <div class="tab-swatch" id="swatch-1" style="background: #ec4899;"></div>
+                        <input type="text" class="tab-input" id="input-1" value="#EC4899" maxlength="7" onclick="event.stopPropagation()">
                     </div>
                 </div>
+
+                <!-- Single Color Wheel -->
+                <div id="color-wheel"></div>
 
                 <!-- Length Slider -->
                 <div class="slider-group">
@@ -119,7 +109,7 @@
                 </div>
             </div>
             
-            <button onclick="logout()" style="background:transparent; border: 1px solid #333; color: #888;">Logout</button>
+            <button onclick="logout()" style="background:transparent; border: 1px solid #333; color: #888; padding: 12px; width: 100%; border-radius: 10px;">Logout</button>
             <div class="color-list" id="colorList"></div>
         </div>
     </div>
@@ -131,6 +121,10 @@
 
         let colorPicker; 
         let useInches = false;
+        
+        // Array holding [BaseColor, TipColor]
+        let activeColors = ["#6366f1", "#ec4899"];
+        let activeTab = 0; // 0 = Base, 1 = Tip
 
         window.onload = () => {
             initColorPicker();
@@ -138,11 +132,11 @@
             loadColors();
         };
 
-        // --- Pro Color Wheel (2 Colors) ---
+        // --- Pro Color Wheel (Tab System) ---
         function initColorPicker() {
             colorPicker = new iro.ColorPicker("#color-wheel", {
                 width: 250,
-                colors: ["#6366f1", "#ec4899"], // Index 0 = Base, Index 1 = Tip
+                color: activeColors[0],
                 borderWidth: 2,
                 borderColor: "#333",
                 layout: [
@@ -151,39 +145,40 @@
                 ]
             });
 
-            const hex1 = document.getElementById('hexInput1');
-            const hex2 = document.getElementById('hexInput2');
-            const swatch1 = document.getElementById('live-swatch-1');
-            const swatch2 = document.getElementById('live-swatch-2');
-
+            // When wheel is dragged, update whichever tab is active
             colorPicker.on('color:change', function(color) {
-                if (color.index === 0) {
-                    hex1.value = color.hexString;
-                    swatch1.style.backgroundColor = color.hexString;
-                } else {
-                    hex2.value = color.hexString;
-                    swatch2.style.backgroundColor = color.hexString;
-                }
+                activeColors[activeTab] = color.hexString;
+                document.getElementById('swatch-' + activeTab).style.backgroundColor = color.hexString;
+                document.getElementById('input-' + activeTab).value = color.hexString.toUpperCase();
             });
 
-            hex1.addEventListener('input', function() {
-                let val = this.value;
-                if (!val.startsWith('#')) val = '#' + val;
-                if (val.length === 4 || val.length === 7) {
-                    try { colorPicker.colors[0].hexString = val; swatch1.style.backgroundColor = val; } catch (e) {}
-                }
+            // When user manually types hex code
+            [0, 1].forEach(i => {
+                const input = document.getElementById('input-' + i);
+                input.addEventListener('input', function() {
+                    let val = this.value;
+                    if (!val.startsWith('#')) val = '#' + val;
+                    if (val.length === 4 || val.length === 7) {
+                        try { 
+                            activeColors[i] = val;
+                            document.getElementById('swatch-' + i).style.backgroundColor = val;
+                            if (activeTab === i) colorPicker.color.hexString = val;
+                        } catch (e) {}
+                    }
+                });
+                // Switch to this tab when tapping the text box
+                input.addEventListener('focus', () => switchTab(i));
             });
+        }
 
-            hex2.addEventListener('input', function() {
-                let val = this.value;
-                if (!val.startsWith('#')) val = '#' + val;
-                if (val.length === 4 || val.length === 7) {
-                    try { colorPicker.colors[1].hexString = val; swatch2.style.backgroundColor = val; } catch (e) {}
-                }
-            });
-
-            swatch1.style.backgroundColor = colorPicker.colors[0].hexString;
-            swatch2.style.backgroundColor = colorPicker.colors[1].hexString;
+        // Switch between editing Base and Tip
+        function switchTab(index) {
+            activeTab = index;
+            document.getElementById('tab-0').classList.remove('active');
+            document.getElementById('tab-1').classList.remove('active');
+            document.getElementById('tab-' + index).classList.add('active');
+            
+            try { colorPicker.color.hexString = activeColors[index]; } catch (e) {}
         }
 
         // --- Slider Logic ---
@@ -252,8 +247,8 @@
         }
 
         async function saveColor() {
-            const hex1 = colorPicker.colors[0].hexString; // Base
-            const hex2 = colorPicker.colors[1].hexString; // Tip
+            const hex1 = activeColors[0]; // Base
+            const hex2 = activeColors[1]; // Tip
             const lengthCm = document.getElementById('lengthSlider').value;
             const nameInput = document.getElementById('colorName');
             const name = nameInput.value || 'Unnamed Entry';
@@ -295,20 +290,20 @@
                 const h2 = c.hex2 || c.hex || '#ffffff'; // Tip
                 const len = c.lengthCm || '?';
                 
-                // This creates the tall bat shape, sliced exactly 50/50 down the middle!
+                // Creates a full width bar, 50% left, 50% right
                 const gradient = `linear-gradient(to right, ${h1} 50%, ${h2} 50%)`;
 
                 list.innerHTML += `
                     <div class="color-item">
-                        <div class="color-info" onclick="copyData('${h1}', '${h2}')">
-                            <div class="bat-swatch" style="background: ${gradient};"></div>
+                        <div class="full-bar" style="background: ${gradient};" onclick="copyData('${h1}', '${h2}')"></div>
+                        <div class="item-footer">
                             <div class="details">
                                 <h3>${c.name}</h3>
-                                <p class="labels">Base: <span>${h1}</span> &nbsp;&bull;&nbsp; Tip: <span>${h2}</span></p>
+                                <p class="labels">Base: <span style="color:${h1};">${h1}</span> &nbsp;&bull;&nbsp; Tip: <span style="color:${h2};">${h2}</span></p>
                                 <p class="labels">Length: <span style="color:#fff;">${len} cm</span></p>
                             </div>
+                            <button class="delete-btn" onclick="deleteColor('${c.id}')">✕</button>
                         </div>
-                        <button class="delete-btn" onclick="deleteColor('${c.id}')">✕</button>
                     </div>
                 `;
             });
