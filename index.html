@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pro Color DB</title>
-    <!-- Importing a professional font and the iro.js color wheel library -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
     
@@ -18,7 +17,6 @@
         /* Login Screen */
         #login-screen { display: flex; flex-direction: column; gap: 15px; margin-top: 50px; }
         input[type="password"] { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #333; background: #15171c; color: white; box-sizing: border-box; font-size: 16px; font-family: 'Inter', sans-serif;}
-        
         button { padding: 14px; border: none; border-radius: 10px; background: var(--primary); color: white; font-weight: 600; font-size: 16px; cursor: pointer; transition: 0.2s; font-family: 'Inter', sans-serif;}
         button:hover { background: var(--primary-hover); }
 
@@ -26,27 +24,47 @@
         #app-screen { display: none; flex-direction: column; gap: 20px; }
         .picker-card { background: var(--card); padding: 25px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; gap: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.4); border: 1px solid #2a2e37;}
         
-        /* Hex Input Area */
-        .hex-group { display: flex; align-items: center; width: 100%; gap: 10px; background: #15171c; padding: 10px; border-radius: 10px; border: 1px solid #333; box-sizing: border-box;}
-        .hex-swatch { width: 30px; height: 30px; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1); transition: background 0.1s;}
-        input[type="text"] { flex-grow: 1; background: transparent; border: none; color: white; font-size: 16px; font-family: monospace; outline: none; text-transform: uppercase; }
-        input[type="text"]::placeholder { color: #666; font-family: 'Inter', sans-serif; text-transform: none; }
+        /* Dual Hex Input Area */
+        .hex-container { width: 100%; display: flex; gap: 10px; }
+        .hex-col { display: flex; flex-direction: column; flex: 1; gap: 6px; }
+        .hex-label { font-size: 12px; color: #8b949e; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-left: 2px;}
+        .hex-group { display: flex; align-items: center; gap: 8px; background: #15171c; padding: 10px; border-radius: 10px; border: 1px solid #333; box-sizing: border-box;}
+        .hex-swatch { width: 24px; height: 24px; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1); transition: background 0.1s; flex-shrink: 0;}
+        input[type="text"] { width: 100%; background: transparent; border: none; color: white; font-size: 14px; font-family: monospace; outline: none; text-transform: uppercase; padding: 0;}
         
+        /* Slider Area */
+        .slider-group { width: 100%; display: flex; flex-direction: column; gap: 10px; background: #15171c; padding: 15px; border-radius: 10px; border: 1px solid #333; box-sizing: border-box;}
+        .slider-header { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+        .unit-btn { background: #2a2e37; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 12px; cursor: pointer;}
+        input[type="range"] { width: 100%; accent-color: var(--primary); cursor: pointer; }
+
         /* Name & Save */
         .name-group { width: 100%; display: flex; flex-direction: column; gap: 12px; }
         .name-input { background: #15171c; padding: 14px; border-radius: 10px; border: 1px solid #333; color: white; font-size: 16px; box-sizing: border-box; width: 100%;}
         .save-btn { width: 100%; }
 
-        /* Color List */
+        /* Color List - Sliced Bat Shape */
         .color-list { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
-        .color-item { background: var(--card); padding: 12px 16px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #2a2e37; transition: transform 0.1s;}
-        .color-item:active { transform: scale(0.98); }
-        .color-info { display: flex; align-items: center; gap: 15px; flex-grow: 1; cursor: pointer;}
-        .swatch { width: 45px; height: 45px; border-radius: 50%; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.1), 0 4px 6px rgba(0,0,0,0.3); }
-        .details h3 { margin: 0 0 4px 0; font-size: 16px; font-weight: 600;}
-        .details p { margin: 0; font-size: 13px; color: #8b949e; font-family: monospace; }
-        .delete-btn { background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 10px 14px; border-radius: 8px; font-weight: bold; }
-        .delete-btn:hover { background: #ef4444; color: white; }
+        .color-item { background: var(--card); padding: 14px 16px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #2a2e37; transition: transform 0.1s;}
+        
+        .color-info { display: flex; align-items: center; gap: 15px; flex-grow: 1; cursor: pointer; min-width: 0; }
+        
+        /* The Sliced Bat Shape */
+        .bat-swatch { 
+            width: 34px; 
+            height: 60px; /* Tall oval shape */
+            border-radius: 40px; /* Fully rounded ends */
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1), 0 4px 6px rgba(0,0,0,0.3); 
+            flex-shrink: 0; 
+            border: 2px solid #111;
+        }
+
+        .details { flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px;}
+        .details h3 { margin: 0; font-size: 16px; font-weight: 600; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; line-height: 1.2;}
+        .details p { margin: 0; font-size: 12px; color: #8b949e; font-family: monospace; }
+        .details .labels { font-family: 'Inter', sans-serif; color: #aaa; }
+        
+        .delete-btn { background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 10px 14px; border-radius: 8px; font-weight: bold; flex-shrink: 0;}
         
         /* Toast */
         #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 12px 24px; border-radius: 30px; font-weight: 600; font-size: 14px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 100;}
@@ -64,17 +82,40 @@
 
         <div id="app-screen">
             <div class="picker-card">
-                <!-- The iro.js color wheel will be injected here -->
+                <!-- Color Wheel -->
                 <div id="color-wheel"></div>
                 
-                <div class="hex-group">
-                    <div class="hex-swatch" id="live-swatch"></div>
-                    <input type="text" id="hexInput" maxlength="7" value="#6366f1">
+                <!-- Labeled Hex Inputs -->
+                <div class="hex-container">
+                    <div class="hex-col">
+                        <span class="hex-label">Base Color</span>
+                        <div class="hex-group">
+                            <div class="hex-swatch" id="live-swatch-1"></div>
+                            <input type="text" id="hexInput1" maxlength="7" value="#6366f1">
+                        </div>
+                    </div>
+                    <div class="hex-col">
+                        <span class="hex-label">Tip Color</span>
+                        <div class="hex-group">
+                            <div class="hex-swatch" id="live-swatch-2"></div>
+                            <input type="text" id="hexInput2" maxlength="7" value="#ec4899">
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Length Slider -->
+                <div class="slider-group">
+                    <div class="slider-header">
+                        <span style="color:#aaa;">Length: <b id="lengthDisplay" style="color:white;">25 cm</b></span>
+                        <button class="unit-btn" id="unitToggle" onclick="toggleUnit()">Swap to Inches</button>
+                    </div>
+                    <input type="range" id="lengthSlider" min="1" max="50" value="25" oninput="updateSlider()">
+                </div>
+
+                <!-- Name & Save -->
                 <div class="name-group">
-                    <input type="text" id="colorName" class="name-input" placeholder="Give this color a name...">
-                    <button class="save-btn" onclick="saveColor()">Save Color</button>
+                    <input type="text" id="colorName" class="name-input" placeholder="Give this entry a name...">
+                    <button class="save-btn" onclick="saveColor()">Save Entry</button>
                 </div>
             </div>
             
@@ -86,20 +127,22 @@
     <div id="toast">Copied!</div>
 
     <script>
-        const WORKER_URL = "https://color-api.luku-di456.workers.dev"; // Your Worker URL
+        const WORKER_URL = "https://color-api.luku-di456.workers.dev";
 
         let colorPicker; 
+        let useInches = false;
 
         window.onload = () => {
             initColorPicker();
+            updateSlider();
             loadColors();
         };
 
-        // --- Pro Color Wheel Logic ---
+        // --- Pro Color Wheel (2 Colors) ---
         function initColorPicker() {
             colorPicker = new iro.ColorPicker("#color-wheel", {
-                width: 260,
-                color: "#6366f1",
+                width: 250,
+                colors: ["#6366f1", "#ec4899"], // Index 0 = Base, Index 1 = Tip
                 borderWidth: 2,
                 borderColor: "#333",
                 layout: [
@@ -108,29 +151,59 @@
                 ]
             });
 
-            const hexInput = document.getElementById('hexInput');
-            const liveSwatch = document.getElementById('live-swatch');
+            const hex1 = document.getElementById('hexInput1');
+            const hex2 = document.getElementById('hexInput2');
+            const swatch1 = document.getElementById('live-swatch-1');
+            const swatch2 = document.getElementById('live-swatch-2');
 
             colorPicker.on('color:change', function(color) {
-                hexInput.value = color.hexString;
-                liveSwatch.style.backgroundColor = color.hexString;
-            });
-
-            hexInput.addEventListener('input', function() {
-                let val = this.value;
-                if (!val.startsWith('#')) val = '#' + val;
-                if (val.length === 4 || val.length === 7) {
-                    try {
-                        colorPicker.color.hexString = val;
-                        liveSwatch.style.backgroundColor = val;
-                    } catch (e) { }
+                if (color.index === 0) {
+                    hex1.value = color.hexString;
+                    swatch1.style.backgroundColor = color.hexString;
+                } else {
+                    hex2.value = color.hexString;
+                    swatch2.style.backgroundColor = color.hexString;
                 }
             });
 
-            liveSwatch.style.backgroundColor = colorPicker.color.hexString;
+            hex1.addEventListener('input', function() {
+                let val = this.value;
+                if (!val.startsWith('#')) val = '#' + val;
+                if (val.length === 4 || val.length === 7) {
+                    try { colorPicker.colors[0].hexString = val; swatch1.style.backgroundColor = val; } catch (e) {}
+                }
+            });
+
+            hex2.addEventListener('input', function() {
+                let val = this.value;
+                if (!val.startsWith('#')) val = '#' + val;
+                if (val.length === 4 || val.length === 7) {
+                    try { colorPicker.colors[1].hexString = val; swatch2.style.backgroundColor = val; } catch (e) {}
+                }
+            });
+
+            swatch1.style.backgroundColor = colorPicker.colors[0].hexString;
+            swatch2.style.backgroundColor = colorPicker.colors[1].hexString;
         }
 
-        // --- Database & API Logic ---
+        // --- Slider Logic ---
+        function updateSlider() {
+            const val = document.getElementById('lengthSlider').value;
+            const display = document.getElementById('lengthDisplay');
+            if (useInches) {
+                display.innerText = (val * 0.393701).toFixed(1) + ' in';
+            } else {
+                display.innerText = val + ' cm';
+            }
+        }
+
+        function toggleUnit() {
+            useInches = !useInches;
+            document.getElementById('unitToggle').innerText = useInches ? "Swap to cm" : "Swap to Inches";
+            updateSlider();
+        }
+
+        // --- API & Auth Logic ---
         function getAuthHeaders() {
             return {
                 'Content-Type': 'application/json',
@@ -146,7 +219,6 @@
         }
 
         async function login() {
-            // Automatically lowercase what the user types in the box
             const password = document.getElementById('password').value.toLowerCase();
             try {
                 const res = await fetch(WORKER_URL + '/api/login', {
@@ -157,12 +229,8 @@
                 if (res.ok) {
                     localStorage.setItem('db_password', password);
                     loadColors();
-                } else {
-                    alert('Wrong password!');
-                }
-            } catch (e) {
-                alert('Error connecting to backend.');
-            }
+                } else { alert('Wrong password!'); }
+            } catch (e) { alert('Error connecting to backend.'); }
         }
 
         function logout() {
@@ -173,9 +241,7 @@
 
         async function loadColors() {
             if (!localStorage.getItem('db_password')) return logout();
-
             const res = await fetch(WORKER_URL + '/api/colors', { headers: getAuthHeaders() });
-            
             if (res.status === 401) return logout();
             
             document.getElementById('login-screen').style.display = 'none';
@@ -186,14 +252,16 @@
         }
 
         async function saveColor() {
-            const hex = colorPicker.color.hexString; 
+            const hex1 = colorPicker.colors[0].hexString; // Base
+            const hex2 = colorPicker.colors[1].hexString; // Tip
+            const lengthCm = document.getElementById('lengthSlider').value;
             const nameInput = document.getElementById('colorName');
-            const name = nameInput.value || 'Unnamed Color';
+            const name = nameInput.value || 'Unnamed Entry';
             
             const res = await fetch(WORKER_URL + '/api/colors', {
                 method: 'POST',
                 headers: getAuthHeaders(),
-                body: JSON.stringify({ hex, name })
+                body: JSON.stringify({ name, hex1, hex2, lengthCm })
             });
             
             if (res.ok) {
@@ -204,7 +272,7 @@
         }
 
         async function deleteColor(id) {
-            if(!confirm('Delete this color?')) return;
+            if(!confirm('Delete this entry?')) return;
             await fetch(WORKER_URL + '/api/colors', {
                 method: 'DELETE',
                 headers: getAuthHeaders(),
@@ -213,22 +281,31 @@
             loadColors();
         }
 
-        function copyHex(hex) {
-            navigator.clipboard.writeText(hex);
-            showToast(hex + ' Copied!');
+        function copyData(hex1, hex2) {
+            const text = "Base: " + hex1 + " | Tip: " + hex2;
+            navigator.clipboard.writeText(text);
+            showToast('Copied Colors!');
         }
 
         function renderColors(colors) {
             const list = document.getElementById('colorList');
             list.innerHTML = '';
             colors.forEach(c => {
+                const h1 = c.hex1 || c.hex || '#000000'; // Base
+                const h2 = c.hex2 || c.hex || '#ffffff'; // Tip
+                const len = c.lengthCm || '?';
+                
+                // This creates the tall bat shape, sliced exactly 50/50 down the middle!
+                const gradient = `linear-gradient(to right, ${h1} 50%, ${h2} 50%)`;
+
                 list.innerHTML += `
                     <div class="color-item">
-                        <div class="color-info" onclick="copyHex('${c.hex}')">
-                            <div class="swatch" style="background-color: ${c.hex}"></div>
+                        <div class="color-info" onclick="copyData('${h1}', '${h2}')">
+                            <div class="bat-swatch" style="background: ${gradient};"></div>
                             <div class="details">
                                 <h3>${c.name}</h3>
-                                <p>${c.hex}</p>
+                                <p class="labels">Base: <span>${h1}</span> &nbsp;&bull;&nbsp; Tip: <span>${h2}</span></p>
+                                <p class="labels">Length: <span style="color:#fff;">${len} cm</span></p>
                             </div>
                         </div>
                         <button class="delete-btn" onclick="deleteColor('${c.id}')">✕</button>
