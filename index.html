@@ -3,40 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Color DB</title>
+    <title>Pro Color DB</title>
+    <!-- Importing a professional font and the iro.js color wheel library -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+    
     <style>
-        :root { --bg: #121212; --card: #1e1e1e; --text: #ffffff; --primary: #6366f1; }
-        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .container { width: 100%; max-width: 500px; }
+        :root { --bg: #0f1115; --card: #1c1f26; --text: #f8f8f2; --primary: #6366f1; --primary-hover: #4f46e5; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { width: 100%; max-width: 450px; }
         
+        h1 { text-align: center; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 30px; }
+
         /* Login Screen */
         #login-screen { display: flex; flex-direction: column; gap: 15px; margin-top: 50px; }
-        input[type="password"], input[type="text"] { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #333; background: #2a2a2a; color: white; box-sizing: border-box; }
-        button { padding: 12px; border: none; border-radius: 8px; background: var(--primary); color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        button:hover { opacity: 0.8; }
+        input[type="password"] { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #333; background: #15171c; color: white; box-sizing: border-box; font-size: 16px; font-family: 'Inter', sans-serif;}
+        
+        button { padding: 14px; border: none; border-radius: 10px; background: var(--primary); color: white; font-weight: 600; font-size: 16px; cursor: pointer; transition: 0.2s; font-family: 'Inter', sans-serif;}
+        button:hover { background: var(--primary-hover); }
 
         /* App Screen */
         #app-screen { display: none; flex-direction: column; gap: 20px; }
-        .picker-container { background: var(--card); padding: 20px; border-radius: 12px; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-        input[type="color"] { width: 100%; height: 60px; border: none; border-radius: 8px; cursor: pointer; background: none; }
-        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-        input[type="color"]::-webkit-color-swatch { border: none; border-radius: 8px; }
+        .picker-card { background: var(--card); padding: 25px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; gap: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.4); border: 1px solid #2a2e37;}
         
-        .color-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-        .color-item { background: var(--card); padding: 15px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; }
-        .color-info { display: flex; align-items: center; gap: 15px; }
-        .swatch { width: 40px; height: 40px; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.5); cursor: pointer;}
-        .details h3 { margin: 0; font-size: 16px; }
-        .details p { margin: 0; font-size: 14px; color: #aaa; cursor: pointer;}
-        .delete-btn { background: #ef4444; padding: 8px 12px; }
+        /* Hex Input Area */
+        .hex-group { display: flex; align-items: center; width: 100%; gap: 10px; background: #15171c; padding: 10px; border-radius: 10px; border: 1px solid #333; box-sizing: border-box;}
+        .hex-swatch { width: 30px; height: 30px; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1); transition: background 0.1s;}
+        input[type="text"] { flex-grow: 1; background: transparent; border: none; color: white; font-size: 16px; font-family: monospace; outline: none; text-transform: uppercase; }
+        input[type="text"]::placeholder { color: #666; font-family: 'Inter', sans-serif; text-transform: none; }
+        
+        /* Name & Save */
+        .name-group { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+        .name-input { background: #15171c; padding: 14px; border-radius: 10px; border: 1px solid #333; color: white; font-size: 16px; box-sizing: border-box; width: 100%;}
+        .save-btn { width: 100%; }
+
+        /* Color List */
+        .color-list { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+        .color-item { background: var(--card); padding: 12px 16px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #2a2e37; transition: transform 0.1s;}
+        .color-item:active { transform: scale(0.98); }
+        .color-info { display: flex; align-items: center; gap: 15px; flex-grow: 1; cursor: pointer;}
+        .swatch { width: 45px; height: 45px; border-radius: 50%; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.1), 0 4px 6px rgba(0,0,0,0.3); }
+        .details h3 { margin: 0 0 4px 0; font-size: 16px; font-weight: 600;}
+        .details p { margin: 0; font-size: 13px; color: #8b949e; font-family: monospace; }
+        .delete-btn { background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 10px 14px; border-radius: 8px; font-weight: bold; }
+        .delete-btn:hover { background: #ef4444; color: white; }
         
         /* Toast */
-        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: white; color: black; padding: 10px 20px; border-radius: 20px; display: none; }
+        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 12px 24px; border-radius: 30px; font-weight: 600; font-size: 14px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 100;}
+        .show-toast { opacity: 1 !important; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 style="text-align: center;">🎨 Color DB</h1>
+        <h1>🎨 Pro Color DB</h1>
         
         <div id="login-screen">
             <input type="password" id="password" placeholder="Enter Password">
@@ -44,24 +63,80 @@
         </div>
 
         <div id="app-screen">
-            <div class="picker-container">
-                <input type="color" id="colorPicker" value="#6366f1">
-                <input type="text" id="colorName" placeholder="Give this color a name...">
-                <button onclick="saveColor()">Save Color</button>
+            <div class="picker-card">
+                <!-- The iro.js color wheel will be injected here -->
+                <div id="color-wheel"></div>
+                
+                <div class="hex-group">
+                    <div class="hex-swatch" id="live-swatch"></div>
+                    <input type="text" id="hexInput" maxlength="7" value="#6366f1">
+                </div>
+
+                <div class="name-group">
+                    <input type="text" id="colorName" class="name-input" placeholder="Give this color a name...">
+                    <button class="save-btn" onclick="saveColor()">Save Color</button>
+                </div>
             </div>
-            <button onclick="logout()" style="background:#333; margin-top:10px;">Logout</button>
+            
+            <button onclick="logout()" style="background:transparent; border: 1px solid #333; color: #888;">Logout</button>
             <div class="color-list" id="colorList"></div>
         </div>
     </div>
+    
     <div id="toast">Copied!</div>
 
     <script>
         // ======= EDIT THIS LINE =======
-        const WORKER_URL = "https://color-api.luku-di456.workers.dev"; // Paste your Cloudflare Worker URL here
+        const WORKER_URL = "https://color-api.luku-di456.workers.dev"; // Paste your Worker URL here!
         // ==============================
 
-        window.onload = () => loadColors();
+        let colorPicker; // Will hold our pro color wheel
 
+        window.onload = () => {
+            initColorPicker();
+            loadColors();
+        };
+
+        // --- Pro Color Wheel Logic ---
+        function initColorPicker() {
+            // Setup the iro.js wheel
+            colorPicker = new iro.ColorPicker("#color-wheel", {
+                width: 260,
+                color: "#6366f1",
+                borderWidth: 2,
+                borderColor: "#333",
+                layout: [
+                    { component: iro.ui.Wheel },
+                    { component: iro.ui.Slider, options: { sliderType: 'value' } } // Brightness slider
+                ]
+            });
+
+            const hexInput = document.getElementById('hexInput');
+            const liveSwatch = document.getElementById('live-swatch');
+
+            // When user drags the wheel, update the text box & swatch
+            colorPicker.on('color:change', function(color) {
+                hexInput.value = color.hexString;
+                liveSwatch.style.backgroundColor = color.hexString;
+            });
+
+            // When user types in the text box, update the wheel
+            hexInput.addEventListener('input', function() {
+                let val = this.value;
+                if (!val.startsWith('#')) val = '#' + val;
+                if (val.length === 4 || val.length === 7) {
+                    try {
+                        colorPicker.color.hexString = val;
+                        liveSwatch.style.backgroundColor = val;
+                    } catch (e) { /* Ignore invalid hex typing until it's valid */ }
+                }
+            });
+
+            // Set initial swatch color
+            liveSwatch.style.backgroundColor = colorPicker.color.hexString;
+        }
+
+        // --- Database & API Logic ---
         function getAuthHeaders() {
             return {
                 'Content-Type': 'application/json',
@@ -72,8 +147,8 @@
         function showToast(msg) {
             const toast = document.getElementById('toast');
             toast.innerText = msg;
-            toast.style.display = 'block';
-            setTimeout(() => toast.style.display = 'none', 2000);
+            toast.classList.add('show-toast');
+            setTimeout(() => toast.classList.remove('show-toast'), 2000);
         }
 
         async function login() {
@@ -106,10 +181,7 @@
 
             const res = await fetch(WORKER_URL + '/api/colors', { headers: getAuthHeaders() });
             
-            if (res.status === 401) {
-                logout();
-                return;
-            }
+            if (res.status === 401) return logout();
             
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'flex';
@@ -119,8 +191,10 @@
         }
 
         async function saveColor() {
-            const hex = document.getElementById('colorPicker').value;
-            const name = document.getElementById('colorName').value || 'Unnamed Color';
+            // Grab color directly from our pro wheel!
+            const hex = colorPicker.color.hexString; 
+            const nameInput = document.getElementById('colorName');
+            const name = nameInput.value || 'Unnamed Color';
             
             const res = await fetch(WORKER_URL + '/api/colors', {
                 method: 'POST',
@@ -129,7 +203,8 @@
             });
             
             if (res.ok) {
-                document.getElementById('colorName').value = '';
+                nameInput.value = ''; // Clear name input after saving
+                showToast("Saved!");
                 loadColors();
             }
         }
@@ -155,14 +230,14 @@
             colors.forEach(c => {
                 list.innerHTML += `
                     <div class="color-item">
-                        <div class="color-info">
-                            <div class="swatch" style="background-color: ${c.hex}" onclick="copyHex('${c.hex}')"></div>
+                        <div class="color-info" onclick="copyHex('${c.hex}')">
+                            <div class="swatch" style="background-color: ${c.hex}"></div>
                             <div class="details">
                                 <h3>${c.name}</h3>
-                                <p onclick="copyHex('${c.hex}')">${c.hex}</p>
+                                <p>${c.hex}</p>
                             </div>
                         </div>
-                        <button class="delete-btn" onclick="deleteColor('${c.id}')">X</button>
+                        <button class="delete-btn" onclick="deleteColor('${c.id}')">✕</button>
                     </div>
                 `;
             });
