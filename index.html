@@ -14,17 +14,14 @@
         
         h1 { text-align: center; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 30px; }
 
-        /* Login Screen */
-        #login-screen { display: flex; flex-direction: column; gap: 15px; margin-top: 50px; }
         input[type="password"] { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #333; background: #15171c; color: white; box-sizing: border-box; font-size: 16px; font-family: 'Inter', sans-serif;}
         button { padding: 14px; border: none; border-radius: 10px; background: var(--primary); color: white; font-weight: 600; font-size: 16px; cursor: pointer; transition: 0.2s; font-family: 'Inter', sans-serif;}
         button:hover { background: var(--primary-hover); }
 
-        /* App Screen */
+        #login-screen { display: flex; flex-direction: column; gap: 15px; margin-top: 50px; }
         #app-screen { display: none; flex-direction: column; gap: 20px; }
         .picker-card { background: var(--card); padding: 25px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; gap: 20px; box-shadow: 0 8px 16px rgba(0,0,0,0.4); border: 1px solid #2a2e37;}
         
-        /* BIG TAB SELECTION (Fixes tiny dots!) */
         .color-tabs { display: flex; width: 100%; gap: 10px; }
         .color-tab { flex: 1; background: #15171c; border: 2px solid #333; padding: 12px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 8px;}
         .color-tab.active { border-color: var(--primary); background: rgba(99, 102, 241, 0.08); }
@@ -33,34 +30,54 @@
         .tab-swatch { width: 100%; height: 30px; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1); }
         .tab-input { width: 100%; background: transparent; border: none; color: white; font-size: 14px; font-family: monospace; outline: none; text-align: center; text-transform: uppercase; padding: 0;}
 
-        /* Slider Area */
         .slider-group { width: 100%; display: flex; flex-direction: column; gap: 10px; background: #15171c; padding: 15px; border-radius: 10px; border: 1px solid #333; box-sizing: border-box;}
         .slider-header { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
         .unit-btn { background: #2a2e37; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-size: 12px; cursor: pointer;}
         input[type="range"] { width: 100%; accent-color: var(--primary); cursor: pointer; }
 
-        /* Name & Save */
+        /* --- CUSTOM PROPERTIES UI --- */
+        .props-container { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+        .active-props { display: flex; flex-direction: column; gap: 8px; }
+        .prop-row { display: flex; justify-content: space-between; align-items: center; background: #15171c; padding: 10px 15px; border-radius: 10px; border: 1px solid #333; gap: 10px;}
+        .prop-row label { font-size: 14px; color: #aaa; flex: 1; font-weight: 600;}
+        .prop-input-text { flex: 1.5; background: transparent; border: none; border-bottom: 1px solid #444; color: white; font-size: 14px; outline: none; font-family: 'Inter'; padding: 4px;}
+        .prop-input-check { width: 22px; height: 22px; accent-color: var(--primary); cursor: pointer; }
+        .prop-slider-wrapper { flex: 1.5; display: flex; align-items: center; gap: 10px; }
+        .prop-slider-val { font-size: 14px; font-weight: 600; width: 20px; text-align: right; }
+        .prop-remove { background: transparent; color: #ef4444; border: none; font-weight: bold; cursor: pointer; padding: 4px 8px; }
+        
+        .add-prop-btn { background: #15171c; border: 1px dashed #444; color: #aaa; width: 100%; padding: 10px; border-radius: 10px; font-size: 14px; cursor: pointer; font-family: 'Inter'; transition: 0.2s;}
+        .add-prop-btn:hover { border-color: var(--primary); color: white; }
+        
+        .prop-menu { display: none; flex-direction: column; gap: 12px; background: #2a2e37; padding: 15px; border-radius: 10px; margin-top: 5px; }
+        .freq-list { display: flex; flex-wrap: wrap; gap: 8px; }
+        .freq-chip { background: #15171c; border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 12px; color: #ddd; cursor: pointer; }
+        .freq-chip:hover { border-color: var(--primary); }
+        .new-prop-row { display: flex; gap: 8px; }
+        .new-prop-row input, .new-prop-row select { background: #15171c; border: 1px solid #444; color: white; padding: 8px; border-radius: 6px; font-size: 13px; outline: none; }
+        .new-prop-row input { flex: 1; }
+
         .name-group { width: 100%; display: flex; flex-direction: column; gap: 12px; }
         .name-input { background: #15171c; padding: 14px; border-radius: 10px; border: 1px solid #333; color: white; font-size: 16px; box-sizing: border-box; width: 100%;}
         .save-btn { width: 100%; }
 
-        /* FULL BAR REDESIGN */
+        /* --- SAVED CARDS --- */
         .color-list { display: flex; flex-direction: column; gap: 15px; margin-top: 10px; }
         .color-item { background: var(--card); border-radius: 12px; border: 1px solid #2a2e37; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 4px 6px rgba(0,0,0,0.2);}
-        
-        /* The literal "Whole Bar" */
         .full-bar { width: 100%; height: 60px; cursor: pointer; border-bottom: 1px solid #2a2e37;}
-        
-        .item-footer { padding: 16px; display: flex; justify-content: space-between; align-items: center; }
-        .details { display: flex; flex-direction: column; gap: 4px;}
+        .item-footer { padding: 16px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+        .details { display: flex; flex-direction: column; gap: 6px; flex: 1;}
         .details h3 { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.2;}
         .details p { margin: 0; font-size: 12px; color: #8b949e; font-family: monospace; }
-        .details .labels { font-family: 'Inter', sans-serif; color: #aaa; }
         
-        .delete-btn { background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 10px 14px; border-radius: 8px; font-weight: bold; flex-shrink: 0;}
-        
-        /* Toast */
-        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 12px 24px; border-radius: 30px; font-weight: 600; font-size: 14px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 100;}
+        /* TAGS UI */
+        .tags-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+        .tag { background: #15171c; border: 1px solid #333; padding: 4px 8px; border-radius: 6px; font-size: 11px; color: #ccc; font-weight: 600; letter-spacing: 0.5px; }
+        .tag.check-true { color: #10b981; border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.05); }
+        .tag.check-false { color: #ef4444; border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.05); text-decoration: line-through;}
+
+        .delete-btn { background: rgba(239, 68, 68, 0.1); color: #ef4444; padding: 8px 12px; border-radius: 8px; font-weight: bold; }
+        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 12px 24px; border-radius: 30px; font-weight: 600; font-size: 14px; opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 100;}
         .show-toast { opacity: 1 !important; }
     </style>
 </head>
@@ -76,7 +93,6 @@
         <div id="app-screen">
             <div class="picker-card">
                 
-                <!-- NEW EASY-SELECT TABS -->
                 <div class="color-tabs">
                     <div class="color-tab active" id="tab-0" onclick="switchTab(0)">
                         <span class="tab-label">Base Color</span>
@@ -90,10 +106,8 @@
                     </div>
                 </div>
 
-                <!-- Single Color Wheel -->
                 <div id="color-wheel"></div>
 
-                <!-- Length Slider -->
                 <div class="slider-group">
                     <div class="slider-header">
                         <span style="color:#aaa;">Length: <b id="lengthDisplay" style="color:white;">25 cm</b></span>
@@ -102,7 +116,29 @@
                     <input type="range" id="lengthSlider" min="1" max="50" value="25" oninput="updateSlider()">
                 </div>
 
-                <!-- Name & Save -->
+                <!-- NEW: CUSTOM PROPERTIES -->
+                <div class="props-container">
+                    <div class="active-props" id="active-props-list"></div>
+                    
+                    <button class="add-prop-btn" onclick="togglePropMenu()">+ Add Custom Property</button>
+                    
+                    <div class="prop-menu" id="prop-menu">
+                        <span style="font-size: 12px; color: #888; font-weight: bold; text-transform: uppercase;">Often Used</span>
+                        <div class="freq-list" id="freq-list"></div>
+                        
+                        <span style="font-size: 12px; color: #888; font-weight: bold; text-transform: uppercase; margin-top: 10px;">Create New</span>
+                        <div class="new-prop-row">
+                            <input type="text" id="newPropName" placeholder="E.g. Firmness">
+                            <select id="newPropType">
+                                <option value="text">Text</option>
+                                <option value="slider">Slider (1-10)</option>
+                                <option value="check">Checkmark</option>
+                            </select>
+                            <button onclick="createNewProp()" style="padding: 8px 12px; font-size: 13px;">Add</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="name-group">
                     <input type="text" id="colorName" class="name-input" placeholder="Give this entry a name...">
                     <button class="save-btn" onclick="saveColor()">Save Entry</button>
@@ -121,38 +157,118 @@
 
         let colorPicker; 
         let useInches = false;
-        
-        // Array holding [BaseColor, TipColor]
         let activeColors = ["#6366f1", "#ec4899"];
-        let activeTab = 0; // 0 = Base, 1 = Tip
+        let activeTab = 0;
+
+        // --- Custom Properties State ---
+        let currentProps = []; // Attached to the current unsaved entry
+        let freqProps = JSON.parse(localStorage.getItem('freq_props')) || [
+            { name: "Material", type: "text" },
+            { name: "Firmness", type: "slider" },
+            { name: "Textured", type: "check" }
+        ];
 
         window.onload = () => {
             initColorPicker();
             updateSlider();
+            renderFreqProps();
             loadColors();
         };
 
-        // --- Pro Color Wheel (Tab System) ---
+        // --- Custom Properties Logic ---
+        function togglePropMenu() {
+            const menu = document.getElementById('prop-menu');
+            menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function renderFreqProps() {
+            const list = document.getElementById('freq-list');
+            list.innerHTML = '';
+            freqProps.forEach(p => {
+                list.innerHTML += `<div class="freq-chip" onclick="addPropToForm('${p.name}', '${p.type}')">+ ${p.name}</div>`;
+            });
+        }
+
+        function createNewProp() {
+            const name = document.getElementById('newPropName').value.trim();
+            const type = document.getElementById('newPropType').value;
+            if (!name) return;
+            
+            addPropToForm(name, type);
+            
+            // Save to often used
+            if (!freqProps.find(p => p.name.toLowerCase() === name.toLowerCase())) {
+                freqProps.push({ name, type });
+                localStorage.setItem('freq_props', JSON.stringify(freqProps));
+                renderFreqProps();
+            }
+            document.getElementById('newPropName').value = '';
+        }
+
+        function addPropToForm(name, type) {
+            if (currentProps.find(p => p.name === name)) return; // Prevent dupes
+            
+            let defaultVal = type === 'text' ? '' : (type === 'slider' ? 5 : false);
+            currentProps.push({ name, type, value: defaultVal });
+            
+            document.getElementById('prop-menu').style.display = 'none';
+            renderActiveProps();
+        }
+
+        function removeProp(index) {
+            currentProps.splice(index, 1);
+            renderActiveProps();
+        }
+
+        function updatePropVal(index, val) {
+            currentProps[index].value = val;
+            if (currentProps[index].type === 'slider') {
+                document.getElementById(`prop-val-${index}`).innerText = val;
+            }
+        }
+
+        function renderActiveProps() {
+            const container = document.getElementById('active-props-list');
+            container.innerHTML = '';
+            currentProps.forEach((p, i) => {
+                let inputHtml = '';
+                if (p.type === 'text') {
+                    inputHtml = `<input type="text" class="prop-input-text" placeholder="..." value="${p.value}" oninput="updatePropVal(${i}, this.value)">`;
+                } else if (p.type === 'slider') {
+                    inputHtml = `
+                        <div class="prop-slider-wrapper">
+                            <input type="range" min="1" max="10" value="${p.value}" oninput="updatePropVal(${i}, this.value)">
+                            <span class="prop-slider-val" id="prop-val-${i}">${p.value}</span>
+                        </div>
+                    `;
+                } else if (p.type === 'check') {
+                    inputHtml = `<input type="checkbox" class="prop-input-check" ${p.value ? 'checked' : ''} onchange="updatePropVal(${i}, this.checked)">`;
+                }
+
+                container.innerHTML += `
+                    <div class="prop-row">
+                        <label>${p.name}</label>
+                        ${inputHtml}
+                        <button class="prop-remove" onclick="removeProp(${i})">✕</button>
+                    </div>
+                `;
+            });
+        }
+
+
+        // --- Wheel & Slider Logic ---
         function initColorPicker() {
             colorPicker = new iro.ColorPicker("#color-wheel", {
-                width: 250,
-                color: activeColors[0],
-                borderWidth: 2,
-                borderColor: "#333",
-                layout: [
-                    { component: iro.ui.Wheel },
-                    { component: iro.ui.Slider, options: { sliderType: 'value' } }
-                ]
+                width: 250, color: activeColors[0], borderWidth: 2, borderColor: "#333",
+                layout: [{ component: iro.ui.Wheel }, { component: iro.ui.Slider, options: { sliderType: 'value' } }]
             });
 
-            // When wheel is dragged, update whichever tab is active
             colorPicker.on('color:change', function(color) {
                 activeColors[activeTab] = color.hexString;
                 document.getElementById('swatch-' + activeTab).style.backgroundColor = color.hexString;
                 document.getElementById('input-' + activeTab).value = color.hexString.toUpperCase();
             });
 
-            // When user manually types hex code
             [0, 1].forEach(i => {
                 const input = document.getElementById('input-' + i);
                 input.addEventListener('input', function() {
@@ -166,30 +282,22 @@
                         } catch (e) {}
                     }
                 });
-                // Switch to this tab when tapping the text box
                 input.addEventListener('focus', () => switchTab(i));
             });
         }
 
-        // Switch between editing Base and Tip
         function switchTab(index) {
             activeTab = index;
             document.getElementById('tab-0').classList.remove('active');
             document.getElementById('tab-1').classList.remove('active');
             document.getElementById('tab-' + index).classList.add('active');
-            
             try { colorPicker.color.hexString = activeColors[index]; } catch (e) {}
         }
 
-        // --- Slider Logic ---
         function updateSlider() {
             const val = document.getElementById('lengthSlider').value;
             const display = document.getElementById('lengthDisplay');
-            if (useInches) {
-                display.innerText = (val * 0.393701).toFixed(1) + ' in';
-            } else {
-                display.innerText = val + ' cm';
-            }
+            display.innerText = useInches ? (val * 0.393701).toFixed(1) + ' in' : val + ' cm';
         }
 
         function toggleUnit() {
@@ -198,34 +306,17 @@
             updateSlider();
         }
 
-        // --- API & Auth Logic ---
-        function getAuthHeaders() {
-            return {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('db_password')
-            };
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.classList.add('show-toast');
-            setTimeout(() => toast.classList.remove('show-toast'), 2000);
-        }
+        // --- API Logic ---
+        function getAuthHeaders() { return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('db_password') }; }
+        function showToast(msg) { const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show-toast'); setTimeout(() => t.classList.remove('show-toast'), 2000); }
 
         async function login() {
             const password = document.getElementById('password').value.toLowerCase();
             try {
-                const res = await fetch(WORKER_URL + '/api/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password })
-                });
-                if (res.ok) {
-                    localStorage.setItem('db_password', password);
-                    loadColors();
-                } else { alert('Wrong password!'); }
-            } catch (e) { alert('Error connecting to backend.'); }
+                const res = await fetch(WORKER_URL + '/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) });
+                if (res.ok) { localStorage.setItem('db_password', password); loadColors(); } 
+                else { alert('Wrong password!'); }
+            } catch (e) { alert('Error connecting.'); }
         }
 
         function logout() {
@@ -247,20 +338,23 @@
         }
 
         async function saveColor() {
-            const hex1 = activeColors[0]; // Base
-            const hex2 = activeColors[1]; // Tip
+            const hex1 = activeColors[0]; 
+            const hex2 = activeColors[1]; 
             const lengthCm = document.getElementById('lengthSlider').value;
             const nameInput = document.getElementById('colorName');
             const name = nameInput.value || 'Unnamed Entry';
             
+            // Send the currentProps array to backend!
             const res = await fetch(WORKER_URL + '/api/colors', {
                 method: 'POST',
                 headers: getAuthHeaders(),
-                body: JSON.stringify({ name, hex1, hex2, lengthCm })
+                body: JSON.stringify({ name, hex1, hex2, lengthCm, customFields: currentProps })
             });
             
             if (res.ok) {
                 nameInput.value = ''; 
+                currentProps = []; // Reset form props
+                renderActiveProps();
                 showToast("Saved!");
                 loadColors();
             }
@@ -268,17 +362,12 @@
 
         async function deleteColor(id) {
             if(!confirm('Delete this entry?')) return;
-            await fetch(WORKER_URL + '/api/colors', {
-                method: 'DELETE',
-                headers: getAuthHeaders(),
-                body: JSON.stringify({ id })
-            });
+            await fetch(WORKER_URL + '/api/colors', { method: 'DELETE', headers: getAuthHeaders(), body: JSON.stringify({ id }) });
             loadColors();
         }
 
         function copyData(hex1, hex2) {
-            const text = "Base: " + hex1 + " | Tip: " + hex2;
-            navigator.clipboard.writeText(text);
+            navigator.clipboard.writeText(`Base: ${hex1} | Tip: ${hex2}`);
             showToast('Copied Colors!');
         }
 
@@ -286,12 +375,24 @@
             const list = document.getElementById('colorList');
             list.innerHTML = '';
             colors.forEach(c => {
-                const h1 = c.hex1 || c.hex || '#000000'; // Base
-                const h2 = c.hex2 || c.hex || '#ffffff'; // Tip
+                const h1 = c.hex1 || c.hex || '#000000';
+                const h2 = c.hex2 || c.hex || '#ffffff';
                 const len = c.lengthCm || '?';
-                
-                // Creates a full width bar, 50% left, 50% right
                 const gradient = `linear-gradient(to right, ${h1} 50%, ${h2} 50%)`;
+
+                // Render Custom Fields into neat little Tags
+                let tagsHtml = '';
+                if (c.customFields && c.customFields.length > 0) {
+                    tagsHtml = '<div class="tags-container">';
+                    c.customFields.forEach(f => {
+                        if (f.type === 'check') {
+                            tagsHtml += `<span class="tag ${f.value ? 'check-true' : 'check-false'}">${f.name}</span>`;
+                        } else {
+                            tagsHtml += `<span class="tag">${f.name}: <span style="color:#fff">${f.value}</span></span>`;
+                        }
+                    });
+                    tagsHtml += '</div>';
+                }
 
                 list.innerHTML += `
                     <div class="color-item">
@@ -299,8 +400,9 @@
                         <div class="item-footer">
                             <div class="details">
                                 <h3>${c.name}</h3>
-                                <p class="labels">Base: <span style="color:${h1};">${h1}</span> &nbsp;&bull;&nbsp; Tip: <span style="color:${h2};">${h2}</span></p>
-                                <p class="labels">Length: <span style="color:#fff;">${len} cm</span></p>
+                                <p style="font-family: 'Inter'; color: #aaa;">Base: <span style="color:${h1}; font-family: monospace;">${h1}</span> &nbsp;&bull;&nbsp; Tip: <span style="color:${h2}; font-family: monospace;">${h2}</span></p>
+                                <p style="font-family: 'Inter'; color: #aaa;">Length: <span style="color:#fff;">${len} cm</span></p>
+                                ${tagsHtml}
                             </div>
                             <button class="delete-btn" onclick="deleteColor('${c.id}')">✕</button>
                         </div>
